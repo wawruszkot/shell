@@ -5,7 +5,7 @@
 #   ./run_tests.sh 03     run only tests/03-*'s tests
 set -u
 LANG_SLUG="rust"
-ENTRY="main.rs"
+ENTRY="src/main.rs"
 FILTER="${1:-}"
 # Test dirs are zero-padded (01-, 02-, …) — accept "./run_tests.sh 3" too.
 case "$FILTER" in [1-9]) FILTER="0$FILTER" ;; esac
@@ -29,7 +29,15 @@ compile() {
   case "$LANG_SLUG" in
     c)        "$CC_BIN" -O2 -o .prog "$ENTRY" ;;
     cpp)      "$CXX_BIN" -std=c++17 -O2 -o .prog "$ENTRY" ;;
-    rust)     rustc -O -o .prog "$ENTRY" ;;
+    rust)
+      cargo build --release || return 1
+
+      # Find the produced binary
+      BIN=$(cargo metadata --format-version=1 --no-deps \
+            | sed -n 's/.*"name":"\([^"]*\)".*/\1/p' | head -1)
+
+      cp "target/release/$BIN" .prog
+      ;;
     java)     javac "$ENTRY" ;;
     assembly) nasm -felf64 "$ENTRY" -o .prog.o && ld .prog.o -o .prog ;;
     basic)    fbc -x .prog "$ENTRY" ;;
