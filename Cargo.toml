@@ -1,0 +1,12 @@
+[package]
+name = "shipthatcode-build-shell-rust"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+nix = "0.31.3"
+rustyline = "18.0.1"
+
+[[bin]]
+name = "shipthatcode-build-shell-rust"
+path = "main.rs"
