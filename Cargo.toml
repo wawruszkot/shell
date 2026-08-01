@@ -9,4 +9,7 @@ rustyline = "18.0.1"
 
 [[bin]]
 name = "shipthatcode-build-shell-rust"
-path = "src/main.rs"
+path = "main.rs"
+
+[lib]
+path = "src/lib.rs"
