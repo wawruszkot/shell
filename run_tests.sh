@@ -29,15 +29,7 @@ compile() {
   case "$LANG_SLUG" in
     c)        "$CC_BIN" -O2 -o .prog "$ENTRY" ;;
     cpp)      "$CXX_BIN" -std=c++17 -O2 -o .prog "$ENTRY" ;;
-    rust)
-      cargo build --release || return 1
-
-      # Find the produced binary
-      BIN=$(cargo metadata --format-version=1 --no-deps \
-            | sed -n 's/.*"name":"\([^"]*\)".*/\1/p' | head -1)
-
-      cp "target/release/$BIN" .prog
-      ;;
+    rust)     cargo build --quiet && cp target/debug/shipthatcode-build-shell-rust .prog ;;
     java)     javac "$ENTRY" ;;
     assembly) nasm -felf64 "$ENTRY" -o .prog.o && ld .prog.o -o .prog ;;
     basic)    fbc -x .prog "$ENTRY" ;;
