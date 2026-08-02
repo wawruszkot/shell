@@ -1,4 +1,9 @@
-use shipthatcode_build_shell_rust::cli;
+pub mod shell;
+pub mod builtins;
+pub mod parser;
+pub mod tokeniser;
+pub mod cli;
+pub mod completion;
 
 use nix::sys::signal::{signal, SigHandler, Signal};
 use nix::unistd::{getpid, setpgid};
